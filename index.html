@@ -13,7 +13,6 @@
         .ig-text-gradient { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .glass-card { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); }
         
-        /* Modal hidden by default */
         #postOverlay { 
             display: none; 
             position: fixed; 
@@ -70,17 +69,19 @@
         <div id="user-display" class="text-[10px] font-mono text-gray-400 italic"></div>
     </nav>
 
-    <main class="max-w-md mx-auto mt-12 px-8 text-center">
-        <div class="flex justify-center mb-8">
-            <div class="w-24 h-24 ig-gradient rounded-[28px] flex items-center justify-center font-black text-white text-sm border border-white/20 shadow-2xl">
+    <main class="max-w-md mx-auto mt-20 px-8 text-center">
+        <div class="flex justify-center mb-10">
+            <div class="w-28 h-28 ig-gradient rounded-[32px] flex items-center justify-center font-black text-white text-lg border border-white/20 shadow-2xl">
                 NNSC<br>GRAM
             </div>
         </div>
-        <h2 class="text-3xl font-black tracking-tighter mb-2">Broadcasting Hub</h2>
-        <p class="text-gray-400 text-sm leading-relaxed mb-8">Click the <span class="text-white font-bold">+</span> button below to share match clips or news to the Discord feed.</p>
+        
+        <p class="text-gray-300 text-lg leading-relaxed mb-10 px-4">
+            Click the <span class="text-white font-bold">+</span> button to create a new post
+        </p>
         
         <div class="glass-card p-4 rounded-2xl inline-block text-[10px] text-gray-400 uppercase tracking-widest font-bold border border-white/5">
-            Active Session: <span class="text-green-500 animate-pulse">● Online</span>
+            Network Status: <span class="text-green-500 animate-pulse">● Online</span>
         </div>
     </main>
 
@@ -132,13 +133,11 @@
         const BANNED_WORDS = ["fuck", "shit", "nigger", "faggot", "dick", "asshole", "bitch", "cunt", "retard"];
 
         window.onload = () => {
-            // Loading and Banner Logic
             setTimeout(() => {
                 const splash = document.getElementById('splash-screen');
                 splash.style.opacity = '0';
                 setTimeout(() => {
                     splash.style.display = 'none';
-                    // Show banner if not in app mode
                     if (!window.matchMedia('(display-mode: standalone)').matches) {
                         document.getElementById('installBanner').style.display = 'block';
                     }
@@ -154,7 +153,6 @@
         function showInstructions() {
             const isiOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
             const isPC = !/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-            
             if (isPC) alert("Desktop: Look at your address bar for the 'Install' icon (top right).");
             else if (isiOS) alert("iPhone: Tap 'Share' (bottom center) then 'Add to Home Screen'.");
             else alert("Android: Tap the three dots (⋮) then 'Install App'.");
@@ -171,10 +169,10 @@
             const overlay = document.getElementById('postOverlay');
             if (overlay.style.display === 'block') {
                 overlay.style.display = 'none';
-                document.body.style.overflow = 'auto'; // Re-enable scrolling on home
+                document.body.style.overflow = 'auto';
             } else {
                 overlay.style.display = 'block';
-                document.body.style.overflow = 'hidden'; // Disable scrolling on home when posting
+                document.body.style.overflow = 'hidden';
             }
         }
 
