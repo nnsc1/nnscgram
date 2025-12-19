@@ -4,53 +4,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>NNSC GRAM</title>
-    <link rel="manifest" href="manifest.json">
-    <link rel="apple-touch-icon" href="icon.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         body { background-color: #000; color: white; font-family: -apple-system, sans-serif; margin: 0; padding: 0; overflow-x: hidden; }
         .ig-gradient { background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%); }
         .ig-text-gradient { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        
-        .glass-header { background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+        .glass-header { background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
         .glass-card { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); }
-        
         .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 1000; overflow-y: auto; padding-bottom: 100px; }
         #splash-screen { position: fixed; inset: 0; background: black; z-index: 2000; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.6s ease-out; }
-        
         .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; height: 80px; background: #000; border-top: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-around; align-items: center; z-index: 500; padding-bottom: env(safe-area-inset-bottom); }
         .pfp-preview { width: 90px; height: 90px; border-radius: 50%; object-fit: cover; border: 2px solid rgba(255,255,255,0.2); margin: 0 auto; display: block; }
-        
-        .pulse-btn { animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+        ::-webkit-scrollbar { display: none; }
     </style>
 </head>
 <body class="pb-32">
 
     <div id="splash-screen">
         <div class="w-24 h-24 ig-gradient rounded-[25px] flex items-center justify-center font-black text-white text-center text-[14px] shadow-2xl border border-white/20">NNSC<br>GRAM</div>
-        <p class="mt-6 text-gray-500 font-mono text-[9px] tracking-[0.4em] uppercase animate-pulse">Establishing Identity...</p>
     </div>
 
     <nav class="sticky top-0 z-40 w-full glass-header p-4 flex justify-between items-center">
         <h1 class="text-2xl font-bold tracking-tighter ig-text-gradient">NNSC GRAM</h1>
         <div id="user-display" class="flex items-center space-x-3">
-            <img id="header-pfp" src="" class="w-8 h-8 rounded-full border border-white/20 hidden object-cover shadow-lg">
+            <img id="header-pfp" src="" class="w-8 h-8 rounded-full border border-white/20 hidden object-cover">
             <span id="user-name-text" class="text-[10px] font-mono text-gray-400 italic uppercase"></span>
         </div>
     </nav>
 
     <main class="max-w-md mx-auto mt-20 px-8 text-center">
         <div class="flex justify-center mb-10">
-            <div class="w-28 h-28 ig-gradient rounded-[32px] flex items-center justify-center font-black text-white text-lg border border-white/20 shadow-2xl pulse-btn">NNSC<br>GRAM</div>
+            <div class="w-28 h-28 ig-gradient rounded-[32px] flex items-center justify-center font-black text-white text-lg border border-white/20 shadow-2xl">NNSC<br>GRAM</div>
         </div>
-        <p class="text-gray-400 text-lg leading-relaxed mb-10 px-4 italic font-light">
-            Share your story with the network.
-        </p>
-        <div class="glass-card p-4 rounded-2xl inline-block text-[10px] text-gray-400 uppercase tracking-widest font-bold border border-white/5">
-            Status: <span class="text-green-500">● Live</span>
-        </div>
+        <p class="text-gray-400 text-lg italic mb-10">Select a photo to match with music.</p>
     </main>
 
     <div id="postOverlay" class="modal-overlay">
@@ -62,39 +49,45 @@
                 </div>
                 
                 <div id="profile-setup" class="mb-6 space-y-4 text-center">
-                    <p class="text-[10px] text-orange-400 font-bold uppercase italic">Profile Required</p>
                     <img id="setup-pfp-preview" src="https://i.imgur.com/8NBa867.png" class="pfp-preview mb-2 shadow-2xl">
                     <label class="inline-block bg-white/10 px-5 py-2 rounded-full text-[10px] font-bold uppercase cursor-pointer">
-                        Upload Photo
+                        Pick Profile Pic
                         <input type="file" id="pfpFileInput" class="hidden" accept="image/*" onchange="previewPFP(this, 'setup-pfp-preview')">
                     </label>
-                    <input type="text" id="usernameInput" placeholder="Enter Name..." class="w-full bg-white/5 border border-white/20 p-4 rounded-xl outline-none focus:border-pink-500 text-white text-center font-bold">
+                    <input type="text" id="usernameInput" placeholder="Display Name" class="w-full bg-white/5 border border-white/20 p-4 rounded-xl outline-none text-white text-center font-bold">
                 </div>
 
-                <textarea id="postText" oninput="updateCounter()" rows="4" placeholder="What's on your mind?" class="w-full bg-transparent text-lg outline-none mb-2 text-white resize-none" maxlength="800"></textarea>
-                <div class="flex justify-end mb-4"><span id="charCounter" class="text-[10px] text-gray-500 font-mono">0 / 800</span></div>
+                <textarea id="postText" rows="3" placeholder="Write a caption..." class="w-full bg-transparent text-lg outline-none mb-4 text-white resize-none"></textarea>
 
-                <div class="flex items-center justify-between mb-6 border-t border-white/5 pt-6">
+                <div class="space-y-4 mb-6 border-t border-white/5 pt-6">
                     <label class="flex items-center space-x-4 cursor-pointer">
-                        <div class="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center border border-white/10">
-                            <i class="fas fa-camera text-2xl ig-text-gradient"></i>
+                        <div class="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center border border-white/10">
+                            <i class="fas fa-camera text-xl ig-text-gradient"></i>
                         </div>
-                        <div>
-                            <span class="text-sm font-bold text-gray-200 uppercase tracking-tighter block">Upload Media</span>
-                            <span class="text-[10px] text-gray-500 font-bold uppercase tracking-widest">(Photo or Video)</span>
-                        </div>
+                        <span class="text-sm font-bold text-gray-200 uppercase">1. Select Photo/Video</span>
                         <input type="file" id="mediaInput" class="hidden" accept="image/*,video/*" onchange="handleMediaSelection()">
                     </label>
-                </div>
 
-                <div id="music-section" class="mb-8 hidden">
-                    <div class="glass-card p-4 rounded-2xl border-dashed border-white/20">
-                        <div class="flex items-center space-x-2 mb-3">
-                            <i class="fab fa-spotify text-[#1DB954] text-xl"></i>
-                            <span class="text-[10px] font-black uppercase tracking-widest text-gray-400">Spotify Link</span>
+                    <div id="music-section" class="hidden space-y-4">
+                        <div class="glass-card p-4 rounded-2xl border-white/10">
+                            <div class="flex justify-between items-center mb-3">
+                                <span class="text-[10px] font-black uppercase tracking-widest text-gray-400">2. Match Music</span>
+                                <button onclick="clearMusic()" id="clearMusicBtn" class="hidden text-[9px] text-red-400 font-bold uppercase">Clear</button>
+                            </div>
+
+                            <div id="music-search-container">
+                                <input type="text" id="musicSearchInput" onkeyup="searchMusic()" placeholder="Search Millions of Songs..." class="w-full bg-black/40 border border-white/10 p-3 rounded-xl text-xs text-white outline-none focus:border-pink-500">
+                                <div id="searchResults" class="mt-2 space-y-1 max-h-40 overflow-y-auto hidden"></div>
+                            </div>
+
+                            <div id="musicSelectionPreview" class="hidden items-center space-x-4 bg-white/5 p-2 rounded-xl border border-white/10">
+                                <img id="selectedArtwork" src="" class="w-10 h-10 rounded-lg shadow-lg">
+                                <div class="truncate">
+                                    <p id="selectedTitle" class="text-[10px] font-bold text-white truncate"></p>
+                                    <p id="selectedArtist" class="text-[8px] text-gray-500 truncate"></p>
+                                </div>
+                            </div>
                         </div>
-                        <input type="text" id="spotifyUrl" placeholder="Paste Spotify Link..." class="w-full bg-black/40 border border-white/10 p-3 rounded-xl text-xs text-white outline-none">
-                        <p id="music-error" class="text-[9px] text-red-500 mt-2 hidden font-bold uppercase">⚠️ Explicit content not allowed.</p>
                     </div>
                 </div>
 
@@ -106,10 +99,10 @@
     <div id="settingsOverlay" class="modal-overlay">
         <div class="flex flex-col items-center p-4 min-h-screen justify-center">
             <div class="glass-card w-full max-w-md p-8 rounded-3xl text-center shadow-2xl">
-                <h2 class="text-xl font-black mb-6 uppercase tracking-tighter">Edit Profile</h2>
+                <h2 class="text-xl font-black mb-6 uppercase">Settings</h2>
                 <img id="edit-pfp-preview" src="" class="pfp-preview mb-4 object-cover shadow-2xl">
                 <label class="inline-block bg-white/10 px-5 py-2 rounded-full text-[10px] font-bold uppercase cursor-pointer mb-8">
-                    Change Photo
+                    Update Photo
                     <input type="file" id="editPfpFileInput" class="hidden" accept="image/*" onchange="previewPFP(this, 'edit-pfp-preview')">
                 </label>
                 <input type="text" id="editUsername" placeholder="Username" class="w-full bg-white/5 border border-white/20 p-4 rounded-xl text-white outline-none mb-6 text-center font-bold">
@@ -122,25 +115,19 @@
     </div>
 
     <div class="bottom-nav">
-        <button onclick="location.reload()" class="text-white opacity-60"><i class="fas fa-home text-2xl"></i></button>
-        <button onclick="togglePostModal()" class="ig-gradient w-16 h-11 rounded-xl flex items-center justify-center transform active:scale-90 transition shadow-lg pulse-btn">
-            <i class="fas fa-plus text-white text-2xl"></i>
-        </button>
-        <button onclick="toggleSettings()" class="text-white opacity-60"><i class="fas fa-user-cog text-2xl"></i></button>
+        <button onclick="location.reload()" class="text-white opacity-50"><i class="fas fa-home text-2xl"></i></button>
+        <button onclick="togglePostModal()" class="ig-gradient w-16 h-11 rounded-xl flex items-center justify-center shadow-lg"><i class="fas fa-plus text-white text-2xl"></i></button>
+        <button onclick="toggleSettings()" class="text-white opacity-50"><i class="fas fa-user-cog text-2xl"></i></button>
     </div>
 
     <script>
         const WEBHOOK_URL = "https://discord.com/api/webhooks/1451452135433834556/-p0kcWoFiFnVjp71ayTkHSenY0oTMJpX6WgFKU3UiK8L9f5CVIUDcZvrT_SRYiKH_q8P";
-        const BANNED_WORDS = ["fuck", "shit", "nigger", "faggot", "dick", "asshole", "bitch", "cunt", "retard"];
         let tempBase64 = "";
+        let selectedSong = null;
 
         window.onload = () => {
             loadUser();
-            setTimeout(() => {
-                const splash = document.getElementById('splash-screen');
-                splash.style.opacity = '0';
-                setTimeout(() => splash.style.display = 'none', 600);
-            }, 2000);
+            setTimeout(() => { document.getElementById('splash-screen').style.display = 'none'; }, 1500);
         };
 
         function previewPFP(input, targetId) {
@@ -161,9 +148,8 @@
                 document.getElementById('profile-setup').style.display = 'none';
                 document.getElementById('user-name-text').innerText = `@${data.name}`;
                 if (data.pfp) {
-                    const p = document.getElementById('header-pfp');
-                    p.src = data.pfp;
-                    p.classList.remove('hidden');
+                    document.getElementById('header-pfp').src = data.pfp;
+                    document.getElementById('header-pfp').classList.remove('hidden');
                     document.getElementById('edit-pfp-preview').src = data.pfp;
                 }
                 document.getElementById('editUsername').value = data.name;
@@ -174,7 +160,44 @@
             const input = document.getElementById('mediaInput');
             const music = document.getElementById('music-section');
             if (input.files.length > 0) music.classList.remove('hidden');
-            else music.classList.add('hidden');
+        }
+
+        async function searchMusic() {
+            const query = document.getElementById('musicSearchInput').value;
+            const resultsDiv = document.getElementById('searchResults');
+            if (query.length < 2) { resultsDiv.classList.add('hidden'); return; }
+
+            try {
+                const response = await fetch(`https://itunes.apple.com/search?term=${encodeURIComponent(query)}&entity=song&limit=5`);
+                const data = await response.json();
+                resultsDiv.innerHTML = '';
+                resultsDiv.classList.remove('hidden');
+                data.results.forEach(song => {
+                    const row = document.createElement('div');
+                    row.className = "flex items-center space-x-3 p-2 hover:bg-white/10 rounded-lg cursor-pointer";
+                    row.onclick = () => selectSong(song);
+                    row.innerHTML = `<img src="${song.artworkUrl60}" class="w-8 h-8 rounded"><div class="truncate"><p class="text-[9px] font-bold text-white truncate">${song.trackName}</p><p class="text-[8px] text-gray-500 truncate">${song.artistName}</p></div>`;
+                    resultsDiv.appendChild(row);
+                });
+            } catch (e) {}
+        }
+
+        function selectSong(song) {
+            selectedSong = { title: song.trackName, artist: song.artistName, artwork: song.artworkUrl100.replace('100x100', '600x600') };
+            document.getElementById('music-search-container').classList.add('hidden');
+            document.getElementById('musicSelectionPreview').classList.remove('hidden');
+            document.getElementById('musicSelectionPreview').classList.add('flex');
+            document.getElementById('clearMusicBtn').classList.remove('hidden');
+            document.getElementById('selectedArtwork').src = selectedSong.artwork;
+            document.getElementById('selectedTitle').innerText = selectedSong.title;
+            document.getElementById('selectedArtist').innerText = selectedSong.artist;
+        }
+
+        function clearMusic() {
+            selectedSong = null;
+            document.getElementById('music-search-container').classList.remove('hidden');
+            document.getElementById('musicSelectionPreview').classList.add('hidden');
+            document.getElementById('clearMusicBtn').classList.add('hidden');
         }
 
         function togglePostModal() {
@@ -189,83 +212,50 @@
 
         function saveProfile() {
             const name = document.getElementById('editUsername').value.trim();
-            const existing = JSON.parse(localStorage.getItem('nnsc_user') || '{}');
-            const pfp = tempBase64 || existing.pfp || "";
-            if (!name) return alert("Username required!");
+            const pfp = tempBase64 || JSON.parse(localStorage.getItem('nnsc_user')).pfp;
             localStorage.setItem('nnsc_user', JSON.stringify({ name, pfp }));
             location.reload();
         }
 
-        function updateCounter() {
-            const t = document.getElementById('postText').value;
-            const c = document.getElementById('charCounter');
-            c.innerText = `${t.length} / 800`;
-            c.style.color = t.length > 750 ? "#ef4444" : "#6b7280";
-        }
-
         async function sendToDiscord() {
             const textField = document.getElementById('postText');
-            const spotifyUrl = document.getElementById('spotifyUrl').value.trim();
-            const userIn = document.getElementById('usernameInput').value.trim();
             const mediaInput = document.getElementById('mediaInput');
             const btn = document.getElementById('submitBtn');
+            const userData = JSON.parse(localStorage.getItem('nnsc_user'));
 
-            if (BANNED_WORDS.some(w => textField.value.toLowerCase().includes(w))) {
-                alert("Violated content policy.");
-                return;
-            }
-
-            if (spotifyUrl.toLowerCase().includes('explicit')) {
-                document.getElementById('music-error').classList.remove('hidden');
-                return;
-            }
-
-            let userData = JSON.parse(localStorage.getItem('nnsc_user'));
-            if (!userData) {
-                if (!userIn || !tempBase64) return alert("Finish profile setup first!");
-                userData = { name: userIn, pfp: tempBase64 };
-                localStorage.setItem('nnsc_user', JSON.stringify(userData));
-            }
-
-            if (spotifyUrl && mediaInput.files.length === 0) {
-                alert("Upload a Photo or Video to share music!");
-                return;
-            }
+            if (!userData) return alert("Setup profile first!");
 
             btn.disabled = true;
             btn.innerText = "POSTING...";
 
-            const now = new Date();
-            const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
-            const finalTime = new Date(utc + (3600000 * -4));
-            const timeString = finalTime.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true }) + " NNSCT";
-
+            const timeString = new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }) + " NNSCT";
             const formData = new FormData();
             
+            let musicField = "";
+            if (selectedSong) {
+                musicField = `\n\n─── **POST MUSIC** ───\n🎵 *${selectedSong.title} - ${selectedSong.artist}*`;
+            }
+
             const payload = {
-                content: spotifyUrl ? `🎵 **NOW PLAYING:** ${spotifyUrl}` : "", 
                 embeds: [{
-                    description: `**${textField.value}**`,
+                    description: `**${textField.value}**${musicField}`,
                     color: 0xbc1888,
-                    author: { 
-                        name: `${userData.name} ✅`,
-                        icon_url: "https://i.imgur.com/8NBa867.png" 
-                    },
+                    author: { name: `${userData.name} ✅`, icon_url: "https://i.imgur.com/8NBa867.png" },
                     footer: { text: `NNSC GRAM • ${timeString}` }
                 }]
             };
+
+            if (selectedSong) {
+                payload.embeds[0].thumbnail = { url: selectedSong.artwork };
+            }
 
             if (mediaInput.files.length > 0) formData.append('file', mediaInput.files[0]);
             formData.append('payload_json', JSON.stringify(payload));
 
             try {
                 const response = await fetch(WEBHOOK_URL, { method: 'POST', body: formData });
-                if (response.ok) { alert("Post Successful!"); location.reload(); }
-            } catch (e) { 
-                alert("Post Failed."); 
-                btn.disabled = false; 
-                btn.innerText = "Share Post";
-            }
+                if (response.ok) location.reload();
+            } catch (e) { btn.disabled = false; btn.innerText = "Share Post"; }
         }
     </script>
 </body>
