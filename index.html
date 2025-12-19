@@ -16,19 +16,20 @@
         .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 1000; overflow-y: auto; padding-bottom: 100px; }
         #splash-screen { position: fixed; inset: 0; background: black; z-index: 2000; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.6s ease-out; }
         .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; height: 75px; background: #000; border-top: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-around; align-items: center; z-index: 500; padding-bottom: env(safe-area-inset-bottom); }
+        .pfp-preview { width: 80px; height: 80px; border-radius: 50%; object-cover: cover; border: 2px solid rgba(255,255,255,0.2); margin: 0 auto; display: block; }
     </style>
 </head>
 <body class="pb-32">
 
     <div id="splash-screen">
         <div class="w-24 h-24 ig-gradient rounded-[25px] flex items-center justify-center font-black text-white text-center text-[14px] shadow-2xl border border-white/20">NNSC<br>GRAM</div>
-        <p class="mt-6 text-gray-500 font-mono text-[9px] tracking-[0.4em] uppercase animate-pulse">Syncing Network...</p>
+        <p class="mt-6 text-gray-500 font-mono text-[9px] tracking-[0.4em] uppercase animate-pulse">Establishing Identity...</p>
     </div>
 
     <nav class="sticky top-0 z-40 w-full border-b border-white/10 bg-black/95 backdrop-blur-md p-4 flex justify-between items-center">
         <h1 class="text-2xl font-bold tracking-tighter ig-text-gradient">NNSC GRAM</h1>
         <div id="user-display" class="flex items-center space-x-2">
-            <img id="header-pfp" src="" class="w-6 h-6 rounded-full border border-white/20 hidden object-cover">
+            <img id="header-pfp" src="" class="w-7 h-7 rounded-full border border-white/20 hidden object-cover shadow-lg">
             <span id="user-name-text" class="text-[10px] font-mono text-gray-400 italic uppercase"></span>
         </div>
     </nav>
@@ -38,7 +39,7 @@
             <div class="w-28 h-28 ig-gradient rounded-[32px] flex items-center justify-center font-black text-white text-lg border border-white/20 shadow-2xl">NNSC<br>GRAM</div>
         </div>
         <p class="text-gray-300 text-lg leading-relaxed mb-10 px-4">Click the <span class="text-white font-bold">+</span> button to create a new post</p>
-        <div class="glass-card p-4 rounded-2xl inline-block text-[10px] text-gray-400 uppercase tracking-widest font-bold border border-white/5">Network Status: <span class="text-green-500 animate-pulse">● Online</span></div>
+        <div class="glass-card p-4 rounded-2xl inline-block text-[10px] text-gray-400 uppercase tracking-widest font-bold border border-white/5">Status: <span class="text-green-500">● Broadcast Ready</span></div>
     </main>
 
     <div id="postOverlay" class="modal-overlay">
@@ -49,21 +50,25 @@
                     <button onclick="togglePostModal()" class="text-white text-4xl leading-none">&times;</button>
                 </div>
                 
-                <div id="profile-setup" class="mb-6 space-y-4">
-                    <p class="text-[10px] text-orange-400 font-bold uppercase italic">⚠️ Profile Setup Required</p>
-                    <input type="text" id="usernameInput" placeholder="Enter Username..." class="w-full bg-white/5 border border-white/20 p-4 rounded-xl outline-none focus:border-pink-500 text-white">
-                    <input type="text" id="pfpInput" placeholder="Paste Profile Image URL..." class="w-full bg-white/5 border border-white/20 p-4 rounded-xl outline-none focus:border-pink-500 text-white text-xs">
+                <div id="profile-setup" class="mb-6 space-y-4 text-center">
+                    <p class="text-[10px] text-orange-400 font-bold uppercase italic">⚠️ Profile Selection Required</p>
+                    <img id="setup-pfp-preview" src="https://i.imgur.com/8NBa867.png" class="pfp-preview mb-2">
+                    <label class="inline-block bg-white/10 px-4 py-2 rounded-full text-[10px] font-bold uppercase cursor-pointer">
+                        Select Photo from Library
+                        <input type="file" id="pfpFileInput" class="hidden" accept="image/*" onchange="previewPFP(this, 'setup-pfp-preview')">
+                    </label>
+                    <input type="text" id="usernameInput" placeholder="Set Username..." class="w-full bg-white/5 border border-white/20 p-4 rounded-xl outline-none focus:border-pink-500 text-white text-center">
                 </div>
 
                 <textarea id="postText" oninput="updateCounter()" rows="4" placeholder="What's happening?" class="w-full bg-transparent text-lg outline-none mb-2 text-white resize-none" maxlength="800"></textarea>
                 <div class="flex justify-end mb-4"><span id="charCounter" class="text-[10px] text-gray-500 font-mono">0 / 800</span></div>
 
-                <div class="flex items-center justify-between mb-6">
+                <div class="flex items-center justify-between mb-6 border-t border-white/5 pt-6">
                     <label class="flex items-center space-x-3 cursor-pointer">
                         <div class="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center"><i class="fas fa-camera text-xl ig-text-gradient"></i></div>
                         <div>
-                            <span class="text-sm font-bold text-gray-300 uppercase tracking-tighter block">Add Photo / Video</span>
-                            <span class="text-[10px] text-gray-500 font-bold uppercase tracking-widest">(Required for Music)</span>
+                            <span class="text-sm font-bold text-gray-300 uppercase tracking-tighter block">Media Upload</span>
+                            <span class="text-[10px] text-gray-500 font-bold uppercase">(Required for Music)</span>
                         </div>
                         <input type="file" id="mediaInput" class="hidden" accept="image/*,video/*" onchange="handleMediaSelection()">
                     </label>
@@ -73,10 +78,9 @@
                     <div class="glass-card p-4 rounded-xl border-dashed border-white/20">
                         <div class="flex items-center space-x-2 mb-2">
                             <i class="fab fa-spotify text-[#1DB954] text-xl"></i>
-                            <span class="text-[10px] font-black uppercase tracking-widest text-gray-400">Spotify Link (Optional)</span>
+                            <span class="text-[10px] font-black uppercase tracking-widest text-gray-400">Spotify Link</span>
                         </div>
-                        <input type="text" id="spotifyUrl" placeholder="Paste Spotify URL..." class="w-full bg-black/40 border border-white/10 p-3 rounded-lg text-xs text-white outline-none focus:border-green-500">
-                        <p id="music-error" class="text-[9px] text-red-500 mt-2 hidden font-bold uppercase">⚠️ Explicit tracks are blocked</p>
+                        <input type="text" id="spotifyUrl" placeholder="Paste Spotify URL..." class="w-full bg-black/40 border border-white/10 p-3 rounded-lg text-xs text-white outline-none">
                     </div>
                 </div>
 
@@ -87,15 +91,17 @@
 
     <div id="settingsOverlay" class="modal-overlay">
         <div class="flex flex-col items-center p-4 min-h-screen justify-center">
-            <div class="glass-card w-full max-w-md p-8 rounded-3xl">
+            <div class="glass-card w-full max-w-md p-8 rounded-3xl text-center">
                 <h2 class="text-xl font-black mb-6 uppercase tracking-tighter">Edit Profile</h2>
-                <div class="space-y-4">
-                    <input type="text" id="editUsername" placeholder="Username" class="w-full bg-white/5 border border-white/20 p-4 rounded-xl text-white outline-none">
-                    <input type="text" id="editPfp" placeholder="Profile Pic URL" class="w-full bg-white/5 border border-white/20 p-4 rounded-xl text-white text-xs outline-none">
-                    <div class="flex space-x-2 pt-4">
-                        <button onclick="saveProfile()" class="flex-1 ig-gradient py-4 rounded-xl font-bold uppercase">Save</button>
-                        <button onclick="toggleSettings()" class="flex-1 bg-white/10 py-4 rounded-xl font-bold uppercase">Back</button>
-                    </div>
+                <img id="edit-pfp-preview" src="" class="pfp-preview mb-4 object-cover">
+                <label class="inline-block bg-white/10 px-4 py-2 rounded-full text-[10px] font-bold uppercase cursor-pointer mb-6">
+                    Change Photo
+                    <input type="file" id="editPfpFileInput" class="hidden" accept="image/*" onchange="previewPFP(this, 'edit-pfp-preview')">
+                </label>
+                <input type="text" id="editUsername" placeholder="Username" class="w-full bg-white/5 border border-white/20 p-4 rounded-xl text-white outline-none mb-4">
+                <div class="flex space-x-2">
+                    <button onclick="saveProfile()" class="flex-1 ig-gradient py-4 rounded-xl font-bold uppercase">Save</button>
+                    <button onclick="toggleSettings()" class="flex-1 bg-white/10 py-4 rounded-xl font-bold uppercase">Back</button>
                 </div>
             </div>
         </div>
@@ -103,15 +109,14 @@
 
     <div class="bottom-nav">
         <button onclick="location.reload()" class="text-white"><i class="fas fa-home text-2xl"></i></button>
-        <button onclick="togglePostModal()" class="ig-gradient w-16 h-11 rounded-xl flex items-center justify-center transform active:scale-90 transition shadow-lg">
-            <i class="fas fa-plus text-white text-2xl"></i>
-        </button>
+        <button onclick="togglePostModal()" class="ig-gradient w-16 h-11 rounded-xl flex items-center justify-center transform active:scale-90 transition shadow-lg"><i class="fas fa-plus text-white text-2xl"></i></button>
         <button onclick="toggleSettings()" class="text-white"><i class="fas fa-user-cog text-2xl"></i></button>
     </div>
 
     <script>
         const WEBHOOK_URL = "https://discord.com/api/webhooks/1451452135433834556/-p0kcWoFiFnVjp71ayTkHSenY0oTMJpX6WgFKU3UiK8L9f5CVIUDcZvrT_SRYiKH_q8P";
         const BANNED_WORDS = ["fuck", "shit", "nigger", "faggot", "dick", "asshole", "bitch", "cunt", "retard"];
+        let tempBase64 = "";
 
         window.onload = () => {
             loadUser();
@@ -121,6 +126,17 @@
                 setTimeout(() => splash.style.display = 'none', 600);
             }, 2000);
         };
+
+        function previewPFP(input, targetId) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById(targetId).src = e.target.result;
+                    tempBase64 = e.target.result;
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
 
         function loadUser() {
             const user = localStorage.getItem('nnsc_user');
@@ -132,9 +148,9 @@
                     const p = document.getElementById('header-pfp');
                     p.src = data.pfp;
                     p.classList.remove('hidden');
+                    document.getElementById('edit-pfp-preview').src = data.pfp;
                 }
                 document.getElementById('editUsername').value = data.name;
-                document.getElementById('editPfp').value = data.pfp || "";
             }
         }
 
@@ -157,7 +173,8 @@
 
         function saveProfile() {
             const name = document.getElementById('editUsername').value.trim();
-            const pfp = document.getElementById('editPfp').value.trim();
+            const existing = JSON.parse(localStorage.getItem('nnsc_user') || '{}');
+            const pfp = tempBase64 || existing.pfp || "";
             if (!name) return alert("Name required!");
             localStorage.setItem('nnsc_user', JSON.stringify({ name, pfp }));
             location.reload();
@@ -174,7 +191,6 @@
             const textField = document.getElementById('postText');
             const spotifyUrl = document.getElementById('spotifyUrl').value.trim();
             const userIn = document.getElementById('usernameInput').value.trim();
-            const pfpIn = document.getElementById('pfpInput').value.trim();
             const mediaInput = document.getElementById('mediaInput');
             const btn = document.getElementById('submitBtn');
 
@@ -183,15 +199,10 @@
                 return;
             }
 
-            if (spotifyUrl.toLowerCase().includes('explicit')) {
-                document.getElementById('music-error').classList.remove('hidden');
-                return;
-            }
-
             let userData = JSON.parse(localStorage.getItem('nnsc_user'));
             if (!userData) {
                 if (!userIn) return alert("Set your username first!");
-                userData = { name: userIn, pfp: pfpIn };
+                userData = { name: userIn, pfp: tempBase64 };
                 localStorage.setItem('nnsc_user', JSON.stringify(userData));
             }
 
@@ -201,23 +212,24 @@
             }
 
             btn.disabled = true;
-            btn.innerText = "POSTING...";
+            btn.innerText = "BROADCASTING...";
 
             const now = new Date();
             const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
-            const finalTime = new Date(utc + (3600000 * -4)); // LOCKED: 2 hrs ahead CST (UTC-4)
+            const finalTime = new Date(utc + (3600000 * -4));
             const timeString = finalTime.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true }) + " NNSCT";
 
             const formData = new FormData();
             const payload = {
-                content: spotifyUrl, 
+                content: spotifyUrl,
                 embeds: [{
                     title: "NEW BROADCAST",
                     description: `**${textField.value}**`,
-                    color: 0xbc1888, 
+                    color: 0xbc1888,
                     author: { 
                         name: `${userData.name} ✅`,
-                        icon_url: userData.pfp || "https://i.imgur.com/8NBa867.png"
+                        // We use a default icon if PFP is empty because Discord won't accept Base64 here directly
+                        icon_url: userData.pfp.startsWith('data') ? "https://i.imgur.com/8NBa867.png" : userData.pfp 
                     },
                     footer: { text: `NNSC GRAM • ${timeString}` }
                 }]
