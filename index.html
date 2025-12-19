@@ -4,10 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>NNSC GRAM</title>
-    
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="icon.png">
-    
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -15,80 +13,35 @@
         .ig-gradient { background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%); }
         .ig-text-gradient { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .glass-card { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); }
-        
-        #postOverlay { 
-            display: none; 
-            position: fixed; 
-            inset: 0; 
-            background: rgba(0,0,0,0.98); 
-            z-index: 1000; 
-            overflow-y: auto; 
-            padding-bottom: 100px;
-        }
-        
-        #splash-screen {
-            position: fixed; inset: 0; background: black; z-index: 2000;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            transition: opacity 0.6s ease-out;
-        }
-
-        .bottom-nav {
-            position: fixed; bottom: 0; left: 0; width: 100%;
-            height: 75px; background: #000; border-top: 1px solid rgba(255,255,255,0.1);
-            display: flex; justify-content: space-around; align-items: center; z-index: 500;
-            padding-bottom: env(safe-area-inset-bottom);
-        }
-
-        .install-banner {
-            background: #121212; border-bottom: 1px solid rgba(255,255,255,0.1);
-            padding: 12px 16px; display: none;
-        }
+        .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 1000; overflow-y: auto; padding-bottom: 100px; }
+        #splash-screen { position: fixed; inset: 0; background: black; z-index: 2000; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.6s ease-out; }
+        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; height: 75px; background: #000; border-top: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-around; align-items: center; z-index: 500; padding-bottom: env(safe-area-inset-bottom); }
     </style>
 </head>
 <body class="pb-32">
 
     <div id="splash-screen">
-        <div class="w-24 h-24 ig-gradient rounded-[25px] flex items-center justify-center font-black text-white text-center text-[14px] shadow-2xl border border-white/20">
-            NNSC<br>GRAM
-        </div>
-        <p class="mt-6 text-gray-500 font-mono text-[9px] tracking-[0.4em] uppercase animate-pulse">Establishing Feed..</p>
-    </div>
-
-    <div id="installBanner" class="install-banner">
-        <div class="flex items-center justify-between max-w-md mx-auto">
-            <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 ig-gradient rounded-lg flex items-center justify-center font-black text-[8px]">NNSC</div>
-                <div>
-                    <p class="text-[11px] font-bold uppercase tracking-tight">Add to Home Screen</p>
-                    <p class="text-[9px] text-gray-400 font-medium italic">Install for the full experience</p>
-                </div>
-            </div>
-            <button onclick="showInstructions()" class="text-[10px] bg-white text-black px-4 py-2 rounded-full font-black uppercase tracking-tighter">Instructions</button>
-        </div>
+        <div class="w-24 h-24 ig-gradient rounded-[25px] flex items-center justify-center font-black text-white text-center text-[14px] shadow-2xl border border-white/20">NNSC<br>GRAM</div>
+        <p class="mt-6 text-gray-500 font-mono text-[9px] tracking-[0.4em] uppercase animate-pulse">Syncing Network...</p>
     </div>
 
     <nav class="sticky top-0 z-40 w-full border-b border-white/10 bg-black/95 backdrop-blur-md p-4 flex justify-between items-center">
         <h1 class="text-2xl font-bold tracking-tighter ig-text-gradient">NNSC GRAM</h1>
-        <div id="user-display" class="text-[10px] font-mono text-gray-400 italic"></div>
+        <div id="user-display" class="flex items-center space-x-2">
+            <img id="header-pfp" src="" class="w-6 h-6 rounded-full border border-white/20 hidden object-cover">
+            <span id="user-name-text" class="text-[10px] font-mono text-gray-400 italic uppercase"></span>
+        </div>
     </nav>
 
     <main class="max-w-md mx-auto mt-20 px-8 text-center">
         <div class="flex justify-center mb-10">
-            <div class="w-28 h-28 ig-gradient rounded-[32px] flex items-center justify-center font-black text-white text-lg border border-white/20 shadow-2xl">
-                NNSC<br>GRAM
-            </div>
+            <div class="w-28 h-28 ig-gradient rounded-[32px] flex items-center justify-center font-black text-white text-lg border border-white/20 shadow-2xl">NNSC<br>GRAM</div>
         </div>
-        
-        <p class="text-gray-300 text-lg leading-relaxed mb-10 px-4">
-            Click the <span class="text-white font-bold">+</span> button to create a new post
-        </p>
-        
-        <div class="glass-card p-4 rounded-2xl inline-block text-[10px] text-gray-400 uppercase tracking-widest font-bold border border-white/5">
-            Network Status: <span class="text-green-500 animate-pulse">● Online</span>
-        </div>
+        <p class="text-gray-300 text-lg leading-relaxed mb-10 px-4">Click the <span class="text-white font-bold">+</span> button to create a new post</p>
+        <div class="glass-card p-4 rounded-2xl inline-block text-[10px] text-gray-400 uppercase tracking-widest font-bold border border-white/5">Network Status: <span class="text-green-500 animate-pulse">● Online</span></div>
     </main>
 
-    <div id="postOverlay">
+    <div id="postOverlay" class="modal-overlay">
         <div class="flex flex-col items-center p-4 min-h-screen">
             <div class="glass-card w-full max-w-md p-6 rounded-3xl mt-8">
                 <div class="flex justify-between items-center mb-6">
@@ -96,25 +49,35 @@
                     <button onclick="togglePostModal()" class="text-white text-4xl leading-none">&times;</button>
                 </div>
                 
-                <div id="username-setup" class="mb-6">
-                    <p class="text-[10px] text-orange-400 font-bold uppercase mb-1 italic">⚠️ Username is Permanent</p>
+                <div id="profile-setup" class="mb-6 space-y-4">
+                    <p class="text-[10px] text-orange-400 font-bold uppercase italic">⚠️ Profile Setup Required</p>
                     <input type="text" id="usernameInput" placeholder="Enter Username..." class="w-full bg-white/5 border border-white/20 p-4 rounded-xl outline-none focus:border-pink-500 text-white">
+                    <input type="text" id="pfpInput" placeholder="Paste Profile Image URL..." class="w-full bg-white/5 border border-white/20 p-4 rounded-xl outline-none focus:border-pink-500 text-white text-xs">
                 </div>
 
                 <textarea id="postText" oninput="updateCounter()" rows="4" placeholder="What's happening?" class="w-full bg-transparent text-lg outline-none mb-2 text-white resize-none" maxlength="800"></textarea>
-                
-                <div class="flex justify-end mb-4">
-                    <span id="charCounter" class="text-[10px] text-gray-500 font-mono">0 / 800</span>
+                <div class="flex justify-end mb-4"><span id="charCounter" class="text-[10px] text-gray-500 font-mono">0 / 800</span></div>
+
+                <div class="flex items-center justify-between mb-6">
+                    <label class="flex items-center space-x-3 cursor-pointer">
+                        <div class="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center"><i class="fas fa-camera text-xl ig-text-gradient"></i></div>
+                        <div>
+                            <span class="text-sm font-bold text-gray-300 uppercase tracking-tighter block">Add Photo / Video</span>
+                            <span class="text-[10px] text-gray-500 font-bold uppercase tracking-widest">(Required for Music)</span>
+                        </div>
+                        <input type="file" id="mediaInput" class="hidden" accept="image/*,video/*" onchange="handleMediaSelection()">
+                    </label>
                 </div>
 
-                <div class="flex items-center justify-between mb-8">
-                    <label class="flex items-center space-x-3 cursor-pointer">
-                        <div class="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center">
-                            <i class="fas fa-camera text-xl ig-text-gradient"></i>
+                <div id="music-section" class="mb-8 hidden">
+                    <div class="glass-card p-4 rounded-xl border-dashed border-white/20">
+                        <div class="flex items-center space-x-2 mb-2">
+                            <i class="fab fa-spotify text-[#1DB954] text-xl"></i>
+                            <span class="text-[10px] font-black uppercase tracking-widest text-gray-400">Spotify Link (Optional)</span>
                         </div>
-                        <span class="text-sm font-bold text-gray-300 uppercase tracking-tighter">Add Photo / Video</span>
-                        <input type="file" id="mediaInput" class="hidden" accept="image/png,image/jpeg,video/mp4,video/quicktime">
-                    </label>
+                        <input type="text" id="spotifyUrl" placeholder="Paste Spotify URL..." class="w-full bg-black/40 border border-white/10 p-3 rounded-lg text-xs text-white outline-none focus:border-green-500">
+                        <p id="music-error" class="text-[9px] text-red-500 mt-2 hidden font-bold uppercase">⚠️ Explicit tracks are blocked</p>
+                    </div>
                 </div>
 
                 <button id="submitBtn" onclick="sendToDiscord()" class="w-full ig-gradient text-white font-black py-5 rounded-2xl active:scale-95 transition-all uppercase tracking-widest shadow-2xl">Share Post</button>
@@ -122,102 +85,140 @@
         </div>
     </div>
 
+    <div id="settingsOverlay" class="modal-overlay">
+        <div class="flex flex-col items-center p-4 min-h-screen justify-center">
+            <div class="glass-card w-full max-w-md p-8 rounded-3xl">
+                <h2 class="text-xl font-black mb-6 uppercase tracking-tighter">Edit Profile</h2>
+                <div class="space-y-4">
+                    <input type="text" id="editUsername" placeholder="Username" class="w-full bg-white/5 border border-white/20 p-4 rounded-xl text-white outline-none">
+                    <input type="text" id="editPfp" placeholder="Profile Pic URL" class="w-full bg-white/5 border border-white/20 p-4 rounded-xl text-white text-xs outline-none">
+                    <div class="flex space-x-2 pt-4">
+                        <button onclick="saveProfile()" class="flex-1 ig-gradient py-4 rounded-xl font-bold uppercase">Save</button>
+                        <button onclick="toggleSettings()" class="flex-1 bg-white/10 py-4 rounded-xl font-bold uppercase">Back</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="bottom-nav">
-        <button class="text-white opacity-100"><i class="fas fa-home text-2xl"></i></button>
+        <button onclick="location.reload()" class="text-white"><i class="fas fa-home text-2xl"></i></button>
         <button onclick="togglePostModal()" class="ig-gradient w-16 h-11 rounded-xl flex items-center justify-center transform active:scale-90 transition shadow-lg">
             <i class="fas fa-plus text-white text-2xl"></i>
         </button>
-        <button class="text-gray-800 pointer-events-none"><i class="fas fa-user text-2xl"></i></button>
+        <button onclick="toggleSettings()" class="text-white"><i class="fas fa-user-cog text-2xl"></i></button>
     </div>
 
     <script>
         const WEBHOOK_URL = "https://discord.com/api/webhooks/1451452135433834556/-p0kcWoFiFnVjp71ayTkHSenY0oTMJpX6WgFKU3UiK8L9f5CVIUDcZvrT_SRYiKH_q8P";
-        let currentUser = localStorage.getItem('nnsc_gram_id');
         const BANNED_WORDS = ["fuck", "shit", "nigger", "faggot", "dick", "asshole", "bitch", "cunt", "retard"];
 
         window.onload = () => {
+            loadUser();
             setTimeout(() => {
                 const splash = document.getElementById('splash-screen');
                 splash.style.opacity = '0';
-                setTimeout(() => {
-                    splash.style.display = 'none';
-                    if (!window.matchMedia('(display-mode: standalone)').matches) {
-                        document.getElementById('installBanner').style.display = 'block';
-                    }
-                }, 600);
-            }, 2500);
-
-            if (currentUser) {
-                document.getElementById('username-setup').style.display = 'none';
-                document.getElementById('user-display').innerText = `@${currentUser.toUpperCase()} ✅`;
-            }
+                setTimeout(() => splash.style.display = 'none', 600);
+            }, 2000);
         };
 
-        function showInstructions() {
-            const isiOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-            const isPC = !/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-            if (isPC) alert("Desktop: Look at your address bar for the 'Install' icon (top right).");
-            else if (isiOS) alert("iPhone: Tap 'Share' (bottom center) then 'Add to Home Screen'.");
-            else alert("Android: Tap the three dots (⋮) then 'Install App'.");
+        function loadUser() {
+            const user = localStorage.getItem('nnsc_user');
+            if (user) {
+                const data = JSON.parse(user);
+                document.getElementById('profile-setup').style.display = 'none';
+                document.getElementById('user-name-text').innerText = `@${data.name}`;
+                if (data.pfp) {
+                    const p = document.getElementById('header-pfp');
+                    p.src = data.pfp;
+                    p.classList.remove('hidden');
+                }
+                document.getElementById('editUsername').value = data.name;
+                document.getElementById('editPfp').value = data.pfp || "";
+            }
         }
 
-        function updateCounter() {
-            const text = document.getElementById('postText').value;
-            const counter = document.getElementById('charCounter');
-            counter.innerText = `${text.length} / 800`;
-            counter.style.color = text.length > 750 ? "#ef4444" : "#6b7280";
+        function handleMediaSelection() {
+            const input = document.getElementById('mediaInput');
+            const music = document.getElementById('music-section');
+            if (input.files.length > 0) music.classList.remove('hidden');
+            else music.classList.add('hidden');
         }
 
         function togglePostModal() {
-            const overlay = document.getElementById('postOverlay');
-            if (overlay.style.display === 'block') {
-                overlay.style.display = 'none';
-                document.body.style.overflow = 'auto';
-            } else {
-                overlay.style.display = 'block';
-                document.body.style.overflow = 'hidden';
-            }
+            const el = document.getElementById('postOverlay');
+            el.style.display = (el.style.display === 'block') ? 'none' : 'block';
+        }
+
+        function toggleSettings() {
+            const el = document.getElementById('settingsOverlay');
+            el.style.display = (el.style.display === 'block') ? 'none' : 'block';
+        }
+
+        function saveProfile() {
+            const name = document.getElementById('editUsername').value.trim();
+            const pfp = document.getElementById('editPfp').value.trim();
+            if (!name) return alert("Name required!");
+            localStorage.setItem('nnsc_user', JSON.stringify({ name, pfp }));
+            location.reload();
+        }
+
+        function updateCounter() {
+            const t = document.getElementById('postText').value;
+            const c = document.getElementById('charCounter');
+            c.innerText = `${t.length} / 800`;
+            c.style.color = t.length > 750 ? "#ef4444" : "#6b7280";
         }
 
         async function sendToDiscord() {
             const textField = document.getElementById('postText');
-            const text = textField.value;
+            const spotifyUrl = document.getElementById('spotifyUrl').value.trim();
             const userIn = document.getElementById('usernameInput').value.trim();
-            const btn = document.getElementById('submitBtn');
+            const pfpIn = document.getElementById('pfpInput').value.trim();
             const mediaInput = document.getElementById('mediaInput');
+            const btn = document.getElementById('submitBtn');
 
-            if (BANNED_WORDS.some(word => text.toLowerCase().includes(word))) {
-                alert("⚠️ SYSTEM: Violation detected.");
-                textField.value = "";
+            if (BANNED_WORDS.some(w => textField.value.toLowerCase().includes(w))) {
+                alert("⚠️ System violation.");
                 return;
             }
 
-            if (!currentUser) {
-                if (!userIn) return alert("Select a username first!");
-                currentUser = userIn;
-                localStorage.setItem('nnsc_gram_id', currentUser);
+            if (spotifyUrl.toLowerCase().includes('explicit')) {
+                document.getElementById('music-error').classList.remove('hidden');
+                return;
+            }
+
+            let userData = JSON.parse(localStorage.getItem('nnsc_user'));
+            if (!userData) {
+                if (!userIn) return alert("Set your username first!");
+                userData = { name: userIn, pfp: pfpIn };
+                localStorage.setItem('nnsc_user', JSON.stringify(userData));
+            }
+
+            if (spotifyUrl && mediaInput.files.length === 0) {
+                alert("Please select a Photo or Video to share this song!");
+                return;
             }
 
             btn.disabled = true;
             btn.innerText = "POSTING...";
 
-            // FIXED TIME: LOCKED TO UTC-4 (2 hrs ahead of CST)
             const now = new Date();
             const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
-            const offset = -4; 
-            const finalTime = new Date(utc + (3600000 * offset));
-            
-            const timeString = finalTime.toLocaleTimeString('en-US', {
-                hour: 'numeric', minute: '2-digit', hour12: true
-            }) + " NNSCT";
+            const finalTime = new Date(utc + (3600000 * -4)); // LOCKED: 2 hrs ahead CST (UTC-4)
+            const timeString = finalTime.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true }) + " NNSCT";
 
             const formData = new FormData();
             const payload = {
+                content: spotifyUrl, 
                 embeds: [{
-                    title: "NEW POST",
-                    description: `**${text}**`,
+                    title: "NEW BROADCAST",
+                    description: `**${textField.value}**`,
                     color: 0xbc1888, 
-                    author: { name: `${currentUser} ✅` },
+                    author: { 
+                        name: `${userData.name} ✅`,
+                        icon_url: userData.pfp || "https://i.imgur.com/8NBa867.png"
+                    },
                     footer: { text: `NNSC GRAM • ${timeString}` }
                 }]
             };
@@ -227,16 +228,8 @@
 
             try {
                 const response = await fetch(WEBHOOK_URL, { method: 'POST', body: formData });
-                if (response.ok) {
-                    alert("Shared!");
-                    location.reload(); 
-                }
-            } catch (error) {
-                alert("Post Failed.");
-            } finally {
-                btn.disabled = false;
-                btn.innerText = "Share Post";
-            }
+                if (response.ok) { alert("Shared!"); location.reload(); }
+            } catch (e) { alert("Fail."); btn.disabled = false; }
         }
     </script>
 </body>
