@@ -14,7 +14,6 @@
         .glass-card { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); }
         .post-input-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 50; overflow-y: auto; }
         
-        /* Splash Screen */
         #splash-screen {
             position: fixed; inset: 0; background: black; z-index: 100;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -74,8 +73,8 @@
             </div>
             
             <div id="username-setup" class="mb-6">
-                <p class="text-[10px] text-orange-400 font-bold uppercase mb-2 italic">⚠️ Identity is Permanent</p>
-                <input type="text" id="usernameInput" placeholder="Enter Team Name..." class="w-full bg-white/5 border border-white/20 p-4 rounded-xl outline-none focus:border-pink-500 text-white">
+                <p class="text-[10px] text-orange-400 font-bold uppercase mb-2 italic">⚠️ Username is Permanent</p>
+                <input type="text" id="usernameInput" placeholder="Enter Username..." class="w-full bg-white/5 border border-white/20 p-4 rounded-xl outline-none focus:border-pink-500 text-white transition-all">
             </div>
 
             <textarea id="postText" oninput="updateCounter()" rows="4" placeholder="What’s happening? (Enter text here)" class="w-full bg-transparent text-lg outline-none mb-2 text-white" maxlength="800"></textarea>
@@ -86,9 +85,9 @@
 
             <div class="flex items-center justify-between mb-8">
                 <label class="flex items-center space-x-3 cursor-pointer">
-                    <i class="fas fa-video text-2xl ig-text-gradient"></i>
-                    <span class="text-sm font-bold text-gray-300">Add Media (.mp4 / .png)</span>
-                    <input type="file" id="mediaInput" class="hidden" accept="image/*,video/mp4,video/quicktime">
+                    <i class="fas fa-camera-retro text-2xl ig-text-gradient"></i>
+                    <span class="text-sm font-bold text-gray-300 uppercase tracking-tighter">Add Photo / Video</span>
+                    <input type="file" id="mediaInput" class="hidden" accept="image/png,image/jpeg,video/mp4,video/quicktime">
                 </label>
             </div>
 
@@ -129,14 +128,9 @@
         function showInstructions() {
             const isiOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
             const isPC = !/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-            
-            if (isPC) {
-                alert("Desktop: Click the 'Install' icon in your address bar (top right).");
-            } else if (isiOS) {
-                alert("iPhone: Tap 'Share' then 'Add to Home Screen'.");
-            } else {
-                alert("Android: Tap the three dots then 'Install App'.");
-            }
+            if (isPC) alert("Desktop: Click 'Install' in your address bar.");
+            else if (isiOS) alert("iPhone: Tap 'Share' then 'Add to Home Screen'.");
+            else alert("Android: Tap the three dots (⋮) then 'Install App'.");
         }
 
         function updateCounter() {
@@ -166,7 +160,7 @@
             }
 
             if (!currentUser) {
-                if (!userIn) return alert("Select a name!");
+                if (!userIn) return alert("Please select a username first!");
                 currentUser = userIn;
                 localStorage.setItem('nnsc_gram_id', currentUser);
             }
@@ -196,11 +190,11 @@
             try {
                 const response = await fetch(WEBHOOK_URL, { method: 'POST', body: formData });
                 if (response.ok) {
-                    alert("Shared to NNSC Feed!");
+                    alert("Posted to Feed!");
                     location.reload(); 
                 }
             } catch (error) {
-                alert("Error.");
+                alert("Connection failed.");
             } finally {
                 btn.disabled = false;
                 btn.innerText = "Share Post";
