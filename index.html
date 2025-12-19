@@ -12,34 +12,46 @@
         body { background-color: #000; color: white; font-family: -apple-system, sans-serif; margin: 0; padding: 0; overflow-x: hidden; }
         .ig-gradient { background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%); }
         .ig-text-gradient { background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        /* Modern Glassmorphism UI */
+        .glass-header { background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
         .glass-card { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        
         .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.98); z-index: 1000; overflow-y: auto; padding-bottom: 100px; }
         #splash-screen { position: fixed; inset: 0; background: black; z-index: 2000; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.6s ease-out; }
-        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; height: 75px; background: #000; border-top: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-around; align-items: center; z-index: 500; padding-bottom: env(safe-area-inset-bottom); }
-        .pfp-preview { width: 80px; height: 80px; border-radius: 50%; object-cover: cover; border: 2px solid rgba(255,255,255,0.2); margin: 0 auto; display: block; }
+        
+        .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; height: 80px; background: #000; border-top: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-around; align-items: center; z-index: 500; padding-bottom: env(safe-area-inset-bottom); }
+        .pfp-preview { width: 90px; height: 90px; border-radius: 50%; object-fit: cover; border: 2px solid rgba(255,255,255,0.2); margin: 0 auto; display: block; }
+        
+        .pulse-btn { animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
     </style>
 </head>
 <body class="pb-32">
 
     <div id="splash-screen">
         <div class="w-24 h-24 ig-gradient rounded-[25px] flex items-center justify-center font-black text-white text-center text-[14px] shadow-2xl border border-white/20">NNSC<br>GRAM</div>
-        <p class="mt-6 text-gray-500 font-mono text-[9px] tracking-[0.4em] uppercase animate-pulse">Establishing Identity...</p>
+        <p class="mt-6 text-gray-500 font-mono text-[9px] tracking-[0.4em] uppercase animate-pulse">Initializing Identity...</p>
     </div>
 
-    <nav class="sticky top-0 z-40 w-full border-b border-white/10 bg-black/95 backdrop-blur-md p-4 flex justify-between items-center">
+    <nav class="sticky top-0 z-40 w-full glass-header p-4 flex justify-between items-center">
         <h1 class="text-2xl font-bold tracking-tighter ig-text-gradient">NNSC GRAM</h1>
-        <div id="user-display" class="flex items-center space-x-2">
-            <img id="header-pfp" src="" class="w-7 h-7 rounded-full border border-white/20 hidden object-cover shadow-lg">
+        <div id="user-display" class="flex items-center space-x-3">
+            <img id="header-pfp" src="" class="w-8 h-8 rounded-full border border-white/20 hidden object-cover shadow-lg">
             <span id="user-name-text" class="text-[10px] font-mono text-gray-400 italic uppercase"></span>
         </div>
     </nav>
 
     <main class="max-w-md mx-auto mt-20 px-8 text-center">
         <div class="flex justify-center mb-10">
-            <div class="w-28 h-28 ig-gradient rounded-[32px] flex items-center justify-center font-black text-white text-lg border border-white/20 shadow-2xl">NNSC<br>GRAM</div>
+            <div class="w-28 h-28 ig-gradient rounded-[32px] flex items-center justify-center font-black text-white text-lg border border-white/20 shadow-2xl pulse-btn">NNSC<br>GRAM</div>
         </div>
-        <p class="text-gray-300 text-lg leading-relaxed mb-10 px-4">Click the <span class="text-white font-bold">+</span> button to create a new post</p>
-        <div class="glass-card p-4 rounded-2xl inline-block text-[10px] text-gray-400 uppercase tracking-widest font-bold border border-white/5">Status: <span class="text-green-500">● Broadcast Ready</span></div>
+        <p class="text-gray-400 text-lg leading-relaxed mb-10 px-4 italic font-light">
+            Share your story with the network.
+        </p>
+        <div class="glass-card p-4 rounded-2xl inline-block text-[10px] text-gray-400 uppercase tracking-widest font-bold border border-white/5">
+            Network: <span class="text-green-500">Secure</span>
+        </div>
     </main>
 
     <div id="postOverlay" class="modal-overlay">
@@ -51,66 +63,71 @@
                 </div>
                 
                 <div id="profile-setup" class="mb-6 space-y-4 text-center">
-                    <p class="text-[10px] text-orange-400 font-bold uppercase italic">⚠️ Profile Selection Required</p>
-                    <img id="setup-pfp-preview" src="https://i.imgur.com/8NBa867.png" class="pfp-preview mb-2">
-                    <label class="inline-block bg-white/10 px-4 py-2 rounded-full text-[10px] font-bold uppercase cursor-pointer">
-                        Select Photo from Library
+                    <p class="text-[10px] text-orange-400 font-bold uppercase italic">Identity Setup Required</p>
+                    <img id="setup-pfp-preview" src="https://i.imgur.com/8NBa867.png" class="pfp-preview mb-2 shadow-2xl">
+                    <label class="inline-block bg-white/10 px-5 py-2 rounded-full text-[10px] font-bold uppercase cursor-pointer hover:bg-white/20 transition">
+                        Select Photo
                         <input type="file" id="pfpFileInput" class="hidden" accept="image/*" onchange="previewPFP(this, 'setup-pfp-preview')">
                     </label>
-                    <input type="text" id="usernameInput" placeholder="Set Username..." class="w-full bg-white/5 border border-white/20 p-4 rounded-xl outline-none focus:border-pink-500 text-white text-center">
+                    <input type="text" id="usernameInput" placeholder="Set Username..." class="w-full bg-white/5 border border-white/20 p-4 rounded-xl outline-none focus:border-pink-500 text-white text-center font-bold">
                 </div>
 
-                <textarea id="postText" oninput="updateCounter()" rows="4" placeholder="What's happening?" class="w-full bg-transparent text-lg outline-none mb-2 text-white resize-none" maxlength="800"></textarea>
+                <textarea id="postText" oninput="updateCounter()" rows="4" placeholder="What's on your mind?" class="w-full bg-transparent text-lg outline-none mb-2 text-white resize-none" maxlength="800"></textarea>
                 <div class="flex justify-end mb-4"><span id="charCounter" class="text-[10px] text-gray-500 font-mono">0 / 800</span></div>
 
                 <div class="flex items-center justify-between mb-6 border-t border-white/5 pt-6">
-                    <label class="flex items-center space-x-3 cursor-pointer">
-                        <div class="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center"><i class="fas fa-camera text-xl ig-text-gradient"></i></div>
+                    <label class="flex items-center space-x-4 cursor-pointer">
+                        <div class="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center border border-white/10 shadow-inner">
+                            <i class="fas fa-camera text-2xl ig-text-gradient"></i>
+                        </div>
                         <div>
-                            <span class="text-sm font-bold text-gray-300 uppercase tracking-tighter block">Media Upload</span>
-                            <span class="text-[10px] text-gray-500 font-bold uppercase">(Required for Music)</span>
+                            <span class="text-sm font-bold text-gray-200 uppercase tracking-tighter block">Photo / Video</span>
+                            <span class="text-[10px] text-gray-500 font-bold uppercase tracking-widest">(Needed for Music)</span>
                         </div>
                         <input type="file" id="mediaInput" class="hidden" accept="image/*,video/*" onchange="handleMediaSelection()">
                     </label>
                 </div>
 
-                <div id="music-section" class="mb-8 hidden">
-                    <div class="glass-card p-4 rounded-xl border-dashed border-white/20">
-                        <div class="flex items-center space-x-2 mb-2">
+                <div id="music-section" class="mb-8 hidden animate-in slide-in-from-bottom-4 duration-300">
+                    <div class="glass-card p-4 rounded-2xl border-dashed border-white/20">
+                        <div class="flex items-center space-x-2 mb-3">
                             <i class="fab fa-spotify text-[#1DB954] text-xl"></i>
-                            <span class="text-[10px] font-black uppercase tracking-widest text-gray-400">Spotify Link</span>
+                            <span class="text-[10px] font-black uppercase tracking-widest text-gray-400">Spotify Soundtrack</span>
                         </div>
-                        <input type="text" id="spotifyUrl" placeholder="Paste Spotify URL..." class="w-full bg-black/40 border border-white/10 p-3 rounded-lg text-xs text-white outline-none">
+                        <input type="text" id="spotifyUrl" placeholder="Paste Spotify Track Link..." class="w-full bg-black/40 border border-white/10 p-3 rounded-xl text-xs text-white outline-none focus:border-green-500">
+                        <p id="music-error" class="text-[9px] text-red-500 mt-2 hidden font-bold uppercase">⚠️ Explicit content not permitted.</p>
                     </div>
                 </div>
 
-                <button id="submitBtn" onclick="sendToDiscord()" class="w-full ig-gradient text-white font-black py-5 rounded-2xl active:scale-95 transition-all uppercase tracking-widest shadow-2xl">Share Post</button>
+                <button id="submitBtn" onclick="sendToDiscord()" class="w-full ig-gradient text-white font-black py-5 rounded-2xl active:scale-95 transition-all uppercase tracking-widest shadow-2xl">Broadcast Post</button>
             </div>
         </div>
     </div>
 
     <div id="settingsOverlay" class="modal-overlay">
         <div class="flex flex-col items-center p-4 min-h-screen justify-center">
-            <div class="glass-card w-full max-w-md p-8 rounded-3xl text-center">
-                <h2 class="text-xl font-black mb-6 uppercase tracking-tighter">Edit Profile</h2>
-                <img id="edit-pfp-preview" src="" class="pfp-preview mb-4 object-cover">
-                <label class="inline-block bg-white/10 px-4 py-2 rounded-full text-[10px] font-bold uppercase cursor-pointer mb-6">
-                    Change Photo
+            <div class="glass-card w-full max-w-md p-8 rounded-3xl text-center shadow-2xl">
+                <h2 class="text-xl font-black mb-6 uppercase tracking-tighter">Profile Settings</h2>
+                <img id="edit-pfp-preview" src="" class="pfp-preview mb-4 object-cover shadow-2xl">
+                <label class="inline-block bg-white/10 px-5 py-2 rounded-full text-[10px] font-bold uppercase cursor-pointer mb-8">
+                    Update Photo
                     <input type="file" id="editPfpFileInput" class="hidden" accept="image/*" onchange="previewPFP(this, 'edit-pfp-preview')">
                 </label>
-                <input type="text" id="editUsername" placeholder="Username" class="w-full bg-white/5 border border-white/20 p-4 rounded-xl text-white outline-none mb-4">
-                <div class="flex space-x-2">
-                    <button onclick="saveProfile()" class="flex-1 ig-gradient py-4 rounded-xl font-bold uppercase">Save</button>
-                    <button onclick="toggleSettings()" class="flex-1 bg-white/10 py-4 rounded-xl font-bold uppercase">Back</button>
+                <input type="text" id="editUsername" placeholder="Username" class="w-full bg-white/5 border border-white/20 p-4 rounded-xl text-white outline-none mb-6 text-center font-bold">
+                <div class="flex space-x-3">
+                    <button onclick="saveProfile()" class="flex-1 ig-gradient py-4 rounded-xl font-bold uppercase shadow-lg">Save</button>
+                    <button onclick="toggleSettings()" class="flex-1 bg-white/5 py-4 rounded-xl font-bold uppercase">Cancel</button>
                 </div>
             </div>
         </div>
     </div>
 
     <div class="bottom-nav">
-        <button onclick="location.reload()" class="text-white"><i class="fas fa-home text-2xl"></i></button>
-        <button onclick="togglePostModal()" class="ig-gradient w-16 h-11 rounded-xl flex items-center justify-center transform active:scale-90 transition shadow-lg"><i class="fas fa-plus text-white text-2xl"></i></button>
-        <button onclick="toggleSettings()" class="text-white"><i class="fas fa-user-cog text-2xl"></i></button>
+        <button onclick="location.reload()" class="text-white opacity-60 hover:opacity-100 transition"><i class="fas fa-home text-2xl"></i></button>
+        <button onclick="togglePostModal()" class="ig-gradient w-16 h-11 rounded-xl flex items-center justify-center transform active:scale-90 transition shadow-lg pulse-btn">
+            <i class="fas fa-plus text-white text-2xl"></i>
+        </button>
+        <button onclick="toggleSettings()" class="text-white opacity-60 hover:opacity-100 transition"><i class="fas fa-user-cog text-2xl"></i></button>
     </div>
 
     <script>
@@ -130,10 +147,10 @@
         function previewPFP(input, targetId) {
             if (input.files && input.files[0]) {
                 const reader = new FileReader();
-                reader.onload = function(e) {
+                reader.onload = e => {
                     document.getElementById(targetId).src = e.target.result;
                     tempBase64 = e.target.result;
-                }
+                };
                 reader.readAsDataURL(input.files[0]);
             }
         }
@@ -175,7 +192,7 @@
             const name = document.getElementById('editUsername').value.trim();
             const existing = JSON.parse(localStorage.getItem('nnsc_user') || '{}');
             const pfp = tempBase64 || existing.pfp || "";
-            if (!name) return alert("Name required!");
+            if (!name) return alert("Username required!");
             localStorage.setItem('nnsc_user', JSON.stringify({ name, pfp }));
             location.reload();
         }
@@ -195,19 +212,24 @@
             const btn = document.getElementById('submitBtn');
 
             if (BANNED_WORDS.some(w => textField.value.toLowerCase().includes(w))) {
-                alert("⚠️ System violation.");
+                alert("Violated content policy.");
+                return;
+            }
+
+            if (spotifyUrl.toLowerCase().includes('explicit')) {
+                document.getElementById('music-error').classList.remove('hidden');
                 return;
             }
 
             let userData = JSON.parse(localStorage.getItem('nnsc_user'));
             if (!userData) {
-                if (!userIn) return alert("Set your username first!");
+                if (!userIn || !tempBase64) return alert("Finish profile setup first!");
                 userData = { name: userIn, pfp: tempBase64 };
                 localStorage.setItem('nnsc_user', JSON.stringify(userData));
             }
 
             if (spotifyUrl && mediaInput.files.length === 0) {
-                alert("Please select a Photo or Video to share this song!");
+                alert("Upload a Photo or Video to share this track!");
                 return;
             }
 
@@ -220,16 +242,16 @@
             const timeString = finalTime.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true }) + " NNSCT";
 
             const formData = new FormData();
+            
+            // RICH PREVIEW FIX: Link is sent in content, not inside the embed.
             const payload = {
-                content: spotifyUrl,
+                content: spotifyUrl ? `🎵 **VIBE CHECK:** ${spotifyUrl}` : "", 
                 embeds: [{
-                    title: "NEW BROADCAST",
                     description: `**${textField.value}**`,
                     color: 0xbc1888,
                     author: { 
                         name: `${userData.name} ✅`,
-                        // We use a default icon if PFP is empty because Discord won't accept Base64 here directly
-                        icon_url: userData.pfp.startsWith('data') ? "https://i.imgur.com/8NBa867.png" : userData.pfp 
+                        icon_url: "https://i.imgur.com/8NBa867.png" 
                     },
                     footer: { text: `NNSC GRAM • ${timeString}` }
                 }]
@@ -240,8 +262,12 @@
 
             try {
                 const response = await fetch(WEBHOOK_URL, { method: 'POST', body: formData });
-                if (response.ok) { alert("Shared!"); location.reload(); }
-            } catch (e) { alert("Fail."); btn.disabled = false; }
+                if (response.ok) { alert("Broadcast Successful!"); location.reload(); }
+            } catch (e) { 
+                alert("Broadcast Failed."); 
+                btn.disabled = false; 
+                btn.innerText = "Broadcast Post";
+            }
         }
     </script>
 </body>
