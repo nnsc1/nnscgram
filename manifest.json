@@ -1,15 +1,20 @@
 {
   "short_name": "NNSC GRAM",
-  "name": "NNSC GRAM Official Network",
+  "name": "NNSC GRAM",
   "icons": [
     {
-      "src": "https://i.imgur.com/8NBa867.png",
+      "src": "icon.png",
       "type": "image/png",
       "sizes": "512x512",
       "purpose": "any maskable"
+    },
+    {
+      "src": "icon.png",
+      "type": "image/png",
+      "sizes": "192x192"
     }
   ],
-  "start_url": ".",
+  "start_url": "index.html",
   "display": "standalone",
   "theme_color": "#000000",
   "background_color": "#000000"
